@@ -1,0 +1,347 @@
+/* ─────────────────────────────────────────────────────────────
+   ScarletMu · 8-bit RPG home  ·  shared tokens & primitives
+   palette: paper-white + monochrome dark green
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --paper: #efe8d4;       /* warm aged paper */
+  --paper-2: #e6dec7;     /* paper, recessed */
+  --wash: #d7cdae;        /* panel fill */
+  --mid: #587a5c;         /* mid green */
+  --ink: #1d3528;         /* primary ink */
+  --shadow: #0c1a11;      /* deep shadow */
+  --ink-soft: rgba(29, 53, 40, 0.55);
+
+  --px: 2px;              /* base pixel */
+  --b: 2px solid var(--ink);
+  --b-thick: 3px solid var(--ink);
+  --drop: 4px 4px 0 var(--ink);
+  --drop-sm: 3px 3px 0 var(--ink);
+  --drop-soft: 4px 4px 0 var(--mid);
+
+  --font-jp: "DotGothic16", "Press Start 2P", "VT323", monospace;
+  --font-en: "Press Start 2P", "DotGothic16", monospace;
+  --font-mono: "VT323", "DotGothic16", monospace;
+}
+
+* { box-sizing: border-box; }
+
+.pixel, .pixel * {
+  font-family: var(--font-jp);
+  color: var(--ink);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: pixelated;
+  text-rendering: geometricPrecision;
+  letter-spacing: 0;
+}
+
+.pixel { background: var(--paper); }
+
+.en  { font-family: var(--font-en); letter-spacing: 0.02em; }
+.mono { font-family: var(--font-mono); letter-spacing: 0.02em; }
+
+/* ── paper noise (subtle), no gradients ───────────────────── */
+.paper-bg {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(rgba(12, 26, 17, 0.05) 1px, transparent 1px),
+    radial-gradient(rgba(12, 26, 17, 0.04) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 2px;
+}
+
+.scanlines {
+  position: relative;
+}
+.scanlines::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 2px,
+    rgba(12, 26, 17, 0.06) 2px 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+/* ── boxed window chrome ──────────────────────────────────── */
+.win {
+  background: var(--paper);
+  border: var(--b);
+  box-shadow: var(--drop);
+  position: relative;
+}
+.win-recessed {
+  background: var(--paper-2);
+  border: var(--b);
+  box-shadow: inset 2px 2px 0 rgba(12, 26, 17, 0.18);
+}
+.win-title {
+  border-bottom: var(--b);
+  padding: 6px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-en);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+.win-title .dots {
+  display: inline-flex; gap: 4px;
+}
+.win-title .dots i {
+  width: 8px; height: 8px;
+  background: var(--paper);
+  display: inline-block;
+}
+.win-title .dots i:nth-child(2) { background: var(--mid); }
+
+/* ── pixel bar (HP/MP) ─────────────────────────────────────── */
+.bar {
+  display: flex; align-items: center; gap: 8px;
+}
+.bar-track {
+  height: 12px; flex: 1;
+  background: var(--paper-2);
+  border: var(--b);
+  position: relative;
+  image-rendering: pixelated;
+}
+.bar-fill {
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--ink) 0 6px,
+      var(--mid) 6px 8px
+    );
+  position: relative;
+}
+.bar-fill.empty { background: var(--paper-2); }
+
+/* segmented bar (EXP) */
+.seg {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 2px;
+  height: 10px;
+}
+.seg i {
+  background: var(--paper-2);
+  border: 1px solid var(--ink);
+}
+.seg i.on { background: var(--ink); }
+
+/* ── pixel buttons ─────────────────────────────────────────── */
+.pbtn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border: var(--b);
+  background: var(--paper);
+  box-shadow: var(--drop-sm);
+  font-family: var(--font-en);
+  font-size: 9px;
+  cursor: pointer;
+  color: var(--ink);
+  user-select: none;
+  transition: transform 60ms steps(2), box-shadow 60ms steps(2), background 60ms steps(2);
+  letter-spacing: 0.04em;
+}
+.pbtn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  animation: jitter 120ms steps(2) infinite;
+}
+.pbtn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+.pbtn.ghost { box-shadow: none; }
+.pbtn.cjk { font-family: var(--font-jp); font-size: 14px; letter-spacing: 0; }
+
+@keyframes jitter {
+  0%   { transform: translate(0,0); }
+  50%  { transform: translate(1px,-1px); }
+  100% { transform: translate(-1px,1px); }
+}
+
+/* ── inverted hover for any pixel item ────────────────────── */
+.invert-hover:hover {
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+}
+.invert-hover:hover * { color: var(--paper) !important; }
+
+/* chips inside an inverted parent (hover/active card, menu row, status strip)
+   must flip to transparent bg + paper border, otherwise white-on-white */
+.invert-hover:hover .chip,
+.menu-row:hover .chip,
+.menu-row.active .chip {
+  background: transparent !important;
+  border-color: var(--paper) !important;
+  color: var(--paper) !important;
+}
+/* image placeholder stripes invert too, so the inner label box stays legible */
+.invert-hover:hover .imgph .label {
+  background: var(--ink) !important;
+  border-color: var(--paper) !important;
+  color: var(--paper) !important;
+}
+
+/* ── caret blink ──────────────────────────────────────────── */
+.caret { display: inline-block; width: 0.6ch; background: var(--ink); color: transparent; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { background: transparent; } }
+
+/* ── pixel arrow ──────────────────────────────────────────── */
+.arrow {
+  width: 0; height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid var(--ink);
+}
+.arrow.r { animation: bob 600ms steps(2) infinite; }
+@keyframes bob { 50% { transform: translateX(3px); } }
+
+/* ── chip / tag ───────────────────────────────────────────── */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 7px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  font-family: var(--font-en);
+  font-size: 8px;
+  letter-spacing: 0.04em;
+}
+.chip.solid { background: var(--ink); color: var(--paper); }
+
+/* ── image placeholder (striped) ──────────────────────────── */
+.imgph {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--wash) 0 6px,
+      var(--paper-2) 6px 12px
+    );
+  border: var(--b);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  color: var(--ink-soft);
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.imgph::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0 2px, rgba(12,26,17,0.06) 2px 3px);
+  pointer-events: none;
+}
+.imgph .label {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 2px 8px;
+  z-index: 1;
+}
+
+/* ── scrollers ────────────────────────────────────────────── */
+.scroll-y { overflow-y: auto; }
+.scroll-y::-webkit-scrollbar { width: 10px; }
+.scroll-y::-webkit-scrollbar-track { background: var(--paper-2); border-left: 2px solid var(--ink); }
+.scroll-y::-webkit-scrollbar-thumb { background: var(--ink); border: 2px solid var(--paper-2); }
+
+/* ── dotted divider ───────────────────────────────────────── */
+.dotted {
+  border-top: 2px dashed var(--ink);
+  height: 0;
+}
+.dotted-h {
+  border-left: 2px dashed var(--ink);
+  width: 0;
+}
+
+/* ── slot grid (equipment) ────────────────────────────────── */
+.slot {
+  border: var(--b);
+  background: var(--paper-2);
+  aspect-ratio: 1 / 1;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-en);
+  font-size: 9px;
+  color: var(--ink-soft);
+  position: relative;
+}
+.slot .corner {
+  position: absolute; width: 4px; height: 4px; background: var(--ink);
+}
+.slot .corner.tl { top: 2px; left: 2px; }
+.slot .corner.tr { top: 2px; right: 2px; }
+.slot .corner.bl { bottom: 2px; left: 2px; }
+.slot .corner.br { bottom: 2px; right: 2px; }
+
+/* ── arrow cursor on menu rows ────────────────────────────── */
+.menu-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.menu-row .pointer { opacity: 0; }
+.menu-row:hover, .menu-row.active {
+  background: var(--ink);
+  color: var(--paper) !important;
+  border-color: var(--ink);
+}
+.menu-row:hover *, .menu-row.active * { color: var(--paper) !important; }
+.menu-row:hover .pointer, .menu-row.active .pointer { opacity: 1; }
+.menu-row .pointer { color: var(--paper); font-family: var(--font-en); font-size: 9px; }
+.menu-row.active { box-shadow: var(--drop-sm); }
+
+/* ── inverted status strip (top bar identity row) ───────────── */
+.status-strip {
+  background: var(--ink);
+  color: var(--paper) !important;
+}
+.status-strip *,
+.status-strip .mono,
+.status-strip .en,
+.status-strip .chip { color: var(--paper) !important; }
+.status-strip .chip { border-color: var(--paper); background: transparent; }
+.status-strip .dots i { background: var(--paper); }
+.status-strip .dots i:nth-child(2) { background: var(--mid); }
+
+/* ── star (filled) ─────────────────────────────────────────── */
+.star {
+  font-family: var(--font-mono);
+  color: var(--ink);
+}
+
+/* ── headings ─────────────────────────────────────────────── */
+.h-en {
+  font-family: var(--font-en);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.h-cjk {
+  font-family: var(--font-jp);
+  font-size: 20px;
+  letter-spacing: 0;
+}
+.t-mono { font-family: var(--font-mono); font-size: 16px; line-height: 1.25; }
+
+/* ── reveal animation for typewriter rows ─────────────────── */
+.reveal { white-space: pre; }
+.reveal.done .caret { display: none; }
+
+/* layout helpers */
+.row { display: flex; }
+.col { display: flex; flex-direction: column; }
+.grow { flex: 1; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-5 { gap: 24px; }
+.pad-3 { padding: 12px; }
+.pad-4 { padding: 16px; }
+.pad-5 { padding: 24px; }
