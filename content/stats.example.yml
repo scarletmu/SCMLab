@@ -1,0 +1,7 @@
+# Template for content/stats.yml — STR/DEX/INT/VIT/LUK/AGI bars (0..22).
+- { k: STR, v: 15, note: 后端 / 数据 }
+- { k: DEX, v: 12, note: 前端 / 动效 }
+- { k: INT, v: 16, note: 架构 / 抽象 }
+- { k: VIT, v: 14, note: 维护 / 运维 }
+- { k: LUK, v: 18, note: 玄学调参 }
+- { k: AGI, v: 13, note: 直觉 }

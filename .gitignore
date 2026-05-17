@@ -1,0 +1,62 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# media (originals live on the VDS; in dev, drop test images locally — keep dir, ignore contents)
+/public/media/**
+!/public/media/**/
+!/public/media/**/.gitkeep
+
+# content YAMLs hold personal data — only *.example.yml templates ship in the repo.
+# Real *.yml lives locally (dev) and at the VDS content bind-mount path (see deploy/README).
+/content/**/*.yml
+!/content/**/*.example.yml
+
+# deploy/ holds personal infra details (real domain, VDS paths, ssh aliases).
+# Nothing in here ships in the public repo — templates and real configs both live locally + on the VDS.
+/deploy/
+
+# design archive — lives on the `assets` orphan branch, never tracked on `main`
+/_design/
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Image
+image-sample/

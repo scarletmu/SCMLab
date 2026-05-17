@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.gitignore
+.env*
+!.env.example
+README.md
+Dockerfile
+docker-compose.yml
+deploy
+**/*.log
+.DS_Store
+**/.DS_Store
+public/media/*
+!public/media/**/.gitkeep
+content/**/*.yml
+!content/**/*.example.yml

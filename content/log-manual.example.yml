@@ -1,0 +1,5 @@
+# Template for content/log-manual.yml — manually authored "RECENT LOG" lines.
+# GitHub events get merged in front at runtime.
+- { t: "T-00:10", s: "> 第一次启动游戏" }
+- { t: "T-01:00", s: "> 装备了新武器" }
+- { t: "T-03:30", s: "> 学会了新技能" }

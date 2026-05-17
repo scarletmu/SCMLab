@@ -1,0 +1,20 @@
+# Template for content/character.yml — copy this file to character.yml and fill in.
+# Real character.yml is gitignored to keep personal info out of the public repo.
+handle: Player1
+class: Adventurer
+# image: /media/portraits/example.jpg
+tagline: 这里写一句中文自我介绍...
+taglineEn: your one-line english intro here
+lv: 1
+exp: 0            # 0..20 (segments)
+hp: { now: 100, max: 100 }
+mp: { now: 100, max: 100 }
+gold: "¥ 0"
+home: 起始之村
+location:
+  city: 起始之村
+  latitude: 35.68     # Tokyo as a safe demo coordinate
+  longitude: 139.77
+idNo: "00000"
+fileNo: "FILE 01"
+saveLabel: PLAYER · STATUS · SAVE-FILE 01

@@ -1,0 +1,5 @@
+# Template for content/portraits/<slug>.yml — one file per portrait entry.
+order: 1
+id: P-EX
+title: 示例 · 标题
+# image: /media/portraits/example.jpg

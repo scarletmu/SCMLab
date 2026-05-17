@@ -1,0 +1,4 @@
+# Template for content/socials.yml — social handles shown in the footer hints.
+- { k: GH,   v: "github.com/your-handle" }
+- { k: X,    v: "@your-handle" }
+- { k: BLOG, v: "your-domain.com" }

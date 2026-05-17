@@ -1,0 +1,7 @@
+# Template for content/itasha/<slug>.yml — one file per itasha entry.
+# Real files are gitignored; this stays as a fallback for fresh clones.
+order: 1
+car: Example Car × Character
+place: Example Venue P2
+date: "2025.01"
+# image: /media/itasha/example.jpg   # uncomment when original uploaded to VDS

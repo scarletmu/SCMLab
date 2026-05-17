@@ -1,0 +1,7 @@
+# Template for content/equipment.yml — copy and edit.
+- { slot: EDITOR, name: VSCode,    lvl: Lv.10 }
+- { slot: FRAME,  name: React,     lvl: Lv.10 }
+- { slot: ENGINE, name: Node,      lvl: Lv.10 }
+- { slot: DB,     name: Postgres,  lvl: Lv.10 }
+- { slot: STYLE,  name: Tailwind,  lvl: Lv.10 }
+- { slot: LENS,   name: 50mm f/1.8, lvl: "Lv.??" }

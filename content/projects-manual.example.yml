@@ -1,0 +1,7 @@
+# Template for content/projects-manual.yml — fallback project list when
+# GITHUB_TOKEN is unset or the GraphQL fetch fails.
+# `url` is optional; when present, the card becomes clickable and pops a
+# confirmation modal before navigating to the external link.
+- { name: example-one,   desc: 项目 1 的中文简介。, lang: TS, stars: 10, forks: 2, url: "https://github.com/example/example-one" }
+- { name: example-two,   desc: 项目 2 的中文简介。, lang: Go, stars: 5,  forks: 0 }
+- { name: example-three, desc: 项目 3 的中文简介。, lang: Py, stars: 3,  forks: 1, url: "https://github.com/example/example-three" }
