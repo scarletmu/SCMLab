@@ -7,7 +7,7 @@ import type {
   EquipmentItem,
 } from "@/lib/content";
 
-export function TrainerCard({
+export function CharacterFile({
   character,
   stats,
   equipment,
@@ -21,7 +21,7 @@ export function TrainerCard({
   return (
     <div className="win flex flex-col overflow-hidden">
       <div className="win-title">
-        <span>◆ TRAINER CARD · 训练家手册</span>
+        <span>◆ CHARACTER FILE · 角色档案</span>
         <span className="en" style={{ fontSize: 8 }}>
           ID No. {character.idNo}
         </span>

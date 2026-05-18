@@ -7,7 +7,7 @@
 把"8-bit RPG 角色信息屏"作为个人主页：
 
 - **顶部** —— 存档状态栏（`FILE 01` / `play-time` / `HP` / `MP` / `EXP`）。营造"这是一个正在进行中的存档"的氛围。
-- **左侧** —— 训练家手册（Trainer Card）：肖像、身份、技能、六维属性、装备。
+- **左侧** —— 角色档案（Character File）：肖像、身份、技能、六维属性、装备。
 - **中间** —— GitHub 贡献热力图 + 开源项目（开发者的"战绩册"）。
 - **右侧** —— 痛车画廊（Itasha）/ 人像画廊 / `Now` 面板（当前活动）。
 - **底部** —— 按键提示条 + 版权信息，做成游戏内 tooltip bar 的样式。
@@ -96,11 +96,11 @@
   - grid `1.1fr 1.1fr 1.6fr auto`
   - 单元格：HP zebra 条 · MP zebra 条 · EXP 分段条（**20 格**）· BGM 切换按钮 + `? HELP` chip
 
-### 左列 —— 训练家手册（宽 440px）
+### 左列 —— 角色档案（宽 440px）
 
 单 `.win`。从上到下七部分：
 
-1. **标题栏**：左侧 `◆ TRAINER CARD · 训练家手册`，右侧 `ID No. 02547`。
+1. **标题栏**：左侧 `◆ CHARACTER FILE · 角色档案`，右侧 `ID No. 02547`。
 2. **肖像 + 身份**（grid `190px 1fr`，间距 14px，padding 14px）：
    - 左：190px 肖像，1/1 比例，占位符走扫描线 + 45° 斜条纹。
    - 右（顺序）：
@@ -146,11 +146,12 @@
 ### 右列（440px）—— 三个 `.win` 上下排
 
 - **痛车画廊（Itasha）**：
-  - 标题：左 `◆ ITASHA · 痛车`，右 `4 PHOTOS`。
-  - **2×2** 网格。每格用 `.invert-hover`：4/3 比例图 + 车名（`VT323` 13px）+ `地点 · 日期`（`Press Start 2P` 8px）。
-- **人像画廊（Portrait）**：
-  - 标题：左 `◆ PORTRAIT · 人像`，右 `SET 03`。
-  - **4 列**网格。3/4 比例占位 + 下方说明（例：`胶片 · 室内`）。
+  - 数据：单文件 `content/itasha.yml`（gitignored，无 `.example.yml` 兜底）。条目按 `order` 排序，最多取前 4 条。文件缺失 / 条目不足 4 条 → 用占位槽位补满。
+  - 标题：左 `◆ ITASHA · 痛车`，右 `N / 4 PHOTOS`（N 为已填条数）。
+  - **2×2** 网格固定四槽。每个**已填槽**用 `.invert-hover`：4/3 比例图 + 车名（`VT323` 13px）+ `地点 · 日期`（`Press Start 2P` 8px）。
+  - **空槽**（"汽修店未开门"）：不带 `.invert-hover`（死格，不响应悬停）。
+    - 图区改用 `.warn-tape`：45° 警戒带斜线 `mid 8px / paper 20px` 循环（中绿 × 纸白，低对比、稀疏，不再叠扫描线），居中放一块 paper 底 + ink 边的 `.sign` 牌子，`Press Start 2P` 10px 写 `CLOSED`。
+    - 文字行：车名位 `——`（`color: var(--color-ink-soft)`），地点·日期位 `準備中 · TBA`。
 - **Now 面板**：
   - **5 个键值行**：`CODE` · `♪` · `BOOK` · `LOC` · `CAR`。
   - 行间虚线分割。
@@ -160,7 +161,7 @@
 
 **固定定位**在视口右下角（`position: fixed; right: 24; bottom: 24`），跟随滚动。仅一行：`© YEAR ScarletMu · save-file 01 · press START`，`VT323` 13px，颜色 `--color-mid`。
 
-> FC 手柄按键提示已迁入左列训练家手册的 `CONTROLS` 块，不再属于页脚。
+> FC 手柄按键提示已迁入左列角色档案的 `CONTROLS` 块，不再属于页脚。
 
 ## 交互
 
@@ -177,7 +178,7 @@
 
 ## 素材约束
 
-- 肖像（训练家手册）：195×260 或任何 3/4 比例。
+- 肖像（角色档案）：195×260 或任何 3/4 比例。
 - 痛车照片：**4/3 比例**。
 - 人像画廊照片：**3/4 比例**。
 - 所有照片从 `/media/*` 提供（VDS 上由 Nginx alias —— 见 [architecture.md](./architecture.md)）。放大时加 `image-rendering: pixelated` 保留 8-bit 颗粒感。

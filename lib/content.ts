@@ -1,4 +1,4 @@
-import { readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { cache } from "react";
 import yaml from "js-yaml";
@@ -25,21 +25,16 @@ async function loadYaml<T>(file: string): Promise<T> {
   throw new Error(`content/${file} not found (no .example.yml fallback either)`);
 }
 
-async function loadYamlDir<T>(dir: string): Promise<T[]> {
-  const full = join(CONTENT_DIR, dir);
-  const all = await readdir(full);
-  const real = all.filter(
-    (f) => f.endsWith(".yml") && !f.endsWith(".example.yml"),
-  );
-  const pick =
-    real.length > 0 ? real : all.filter((f) => f.endsWith(".example.yml"));
-  const docs = await Promise.all(
-    pick.map(async (f) => {
-      const raw = await readFile(join(full, f), "utf8");
-      return yaml.load(raw) as T;
-    }),
-  );
-  return docs;
+// Strict loader — no .example.yml fallback. Returns null if the file is
+// missing. Used for content where "no defaults" is the desired UX.
+async function loadYamlStrictOptional<T>(file: string): Promise<T | null> {
+  try {
+    const raw = await readFile(join(CONTENT_DIR, file), "utf8");
+    return yaml.load(raw) as T;
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw err;
+  }
 }
 
 // ─── Schemas ───────────────────────────────────────────────────
@@ -102,20 +97,15 @@ const ProjectsManualSchema = z.array(
   }),
 );
 
-const ItashaSchema = z.object({
-  order: z.number(),
-  car: z.string(),
-  place: z.string(),
-  date: z.string(),
-  image: z.string().optional(),
-});
-
-const PortraitSchema = z.object({
-  order: z.number(),
-  id: z.string(),
-  title: z.string(),
-  image: z.string().optional(),
-});
+const ItashaSchema = z.array(
+  z.object({
+    order: z.number(),
+    car: z.string(),
+    place: z.string(),
+    date: z.string(),
+    image: z.string().optional(),
+  }),
+);
 
 // ─── Loaders (each is cached per render) ───────────────────────
 
@@ -151,18 +141,12 @@ export const getProjectsManual = cache(async () =>
   ProjectsManualSchema.parse(await loadYaml("projects-manual.yml")),
 );
 
+// itasha.yml is single-file and has no .example.yml fallback — missing file
+// just yields zero entries, which the gallery renders as "garage closed" slots.
 export const getItasha = cache(async () => {
-  const docs = await loadYamlDir<unknown>("itasha");
-  return docs
-    .map((d) => ItashaSchema.parse(d))
-    .sort((a, b) => a.order - b.order);
-});
-
-export const getPortraits = cache(async () => {
-  const docs = await loadYamlDir<unknown>("portraits");
-  return docs
-    .map((d) => PortraitSchema.parse(d))
-    .sort((a, b) => a.order - b.order);
+  const raw = await loadYamlStrictOptional<unknown>("itasha.yml");
+  if (raw == null) return [];
+  return ItashaSchema.parse(raw).sort((a, b) => a.order - b.order);
 });
 
 // ─── Inferred types ────────────────────────────────────────────
@@ -174,5 +158,4 @@ export type Social = z.infer<typeof SocialsSchema>[number];
 export type NowManual = z.infer<typeof NowManualSchema>;
 export type LogEntry = z.infer<typeof LogSchema>[number];
 export type ProjectManual = z.infer<typeof ProjectsManualSchema>[number];
-export type Itasha = z.infer<typeof ItashaSchema>;
-export type Portrait = z.infer<typeof PortraitSchema>;
+export type Itasha = z.infer<typeof ItashaSchema>[number];

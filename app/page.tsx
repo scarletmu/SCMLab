@@ -7,16 +7,14 @@ import {
   getLogManual,
   getProjectsManual,
   getItasha,
-  getPortraits,
 } from "@/lib/content";
 import { getGithubData } from "@/lib/github";
 import { getWeatherLabel } from "@/lib/weather";
 import { TopStatusBar } from "@/components/sections/TopStatusBar";
-import { TrainerCard } from "@/components/sections/TrainerCard";
+import { CharacterFile } from "@/components/sections/CharacterFile";
 import { Contributions } from "@/components/sections/Contributions";
 import { Projects } from "@/components/sections/Projects";
 import { ItashaGallery } from "@/components/sections/ItashaGallery";
-import { PortraitGallery } from "@/components/sections/PortraitGallery";
 import { NowPanel } from "@/components/sections/NowPanel";
 import { FooterHints } from "@/components/sections/FooterHints";
 
@@ -36,7 +34,6 @@ export default async function Home() {
     log,
     projectsManual,
     itasha,
-    portraits,
   ] = await Promise.all([
     getCharacter(),
     getStats(),
@@ -46,7 +43,6 @@ export default async function Home() {
     getLogManual(),
     getProjectsManual(),
     getItasha(),
-    getPortraits(),
   ]);
 
   const [github, weatherLabel] = await Promise.all([
@@ -74,7 +70,7 @@ export default async function Home() {
           height: 884,
         }}
       >
-        <TrainerCard
+        <CharacterFile
           character={character}
           stats={stats}
           equipment={equipment}
@@ -88,7 +84,6 @@ export default async function Home() {
 
         <div className="flex flex-col" style={{ gap: 12 }}>
           <ItashaGallery items={itasha} />
-          <PortraitGallery items={portraits} />
           <NowPanel now={nowManual} weatherLabel={weatherLabel} log={log} />
         </div>
       </div>

@@ -12,7 +12,7 @@ LLM-facing index for `scarletmu.com` — ScarletMu's personal homepage. 8-bit RP
 | `components/sections/` | 8 page sections matching `variant-a.jsx` (on `assets` branch) |
 | `lib/` | `content.ts` (YAML+Zod), `github.ts` (GraphQL + PRNG fallback), `weather.ts` (Open-Meteo), `prng.ts`, `cn.ts` |
 | `content/*.example.yml` | Tracked templates with safe placeholder data — schema in `lib/content.ts` |
-| `content/*.yml` | **Gitignored** (real personal data). On VDS, bind-mounted from the content path configured in `.env` (`CONTENT_DIR`). Loader prefers real, falls back to example so fresh clones run without setup. |
+| `content/*.yml` | **Gitignored** (real personal data). On VDS, bind-mounted from the content path configured in `.env` (`CONTENT_DIR`). Loader prefers real, falls back to example so fresh clones run without setup. **Exception:** `content/itasha.yml` has no `.example.yml` fallback — missing or short → gallery fills with `CLOSED` warning-tape placeholders. |
 | `public/media/` | Gitignored. On VDS, bind-mounted from the media path configured in `.env` (`MEDIA_DIR`) |
 | `deploy/` | **Not in the repo.** Entire directory is gitignored — runbook + Nginx config live locally and on the VDS only. |
 | `docs/` | Architecture, design constraints, iteration history |

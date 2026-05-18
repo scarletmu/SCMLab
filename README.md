@@ -1,6 +1,6 @@
 # ScarletMu Home
 
-ScarletMu 的个人主页 —— 8-bit RPG 风格的训练家手册。
+ScarletMu 的个人主页 —— 8-bit RPG 风格的角色档案。
 
 ## 技术栈
 

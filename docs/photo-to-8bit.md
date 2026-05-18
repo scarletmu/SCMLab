@@ -1,6 +1,6 @@
 # 照片 → 8-bit 风格化提示词
 
-把"现实照片"喂给生图大模型（Nano Banana / Sora Image / Midjourney / Stable Diffusion / DALL·E 等），让输出能直接塞进 `scarletmu.com` 的训练家手册、痛车画廊、人像画廊。这份文档是**喂给生图模型的提示词组装手册** —— 不是程序读的配置，是给我自己复制粘贴用的。
+把"现实照片"喂给生图大模型（Nano Banana / Sora Image / Midjourney / Stable Diffusion / DALL·E 等），让输出能直接塞进 `scarletmu.com` 的角色档案、痛车画廊、人像画廊。这份文档是**喂给生图模型的提示词组装手册** —— 不是程序读的配置，是给我自己复制粘贴用的。
 
 ## 风格底色（必须遵守）
 
@@ -61,7 +61,7 @@ photorealistic, photograph, 3d render, smooth gradient, anti-aliased, blurry, de
 
 ### A. 训练家肖像（角色头像，3:4）
 
-用途：左列训练家手册顶部 195×260 那块。要求**正面/3⁄4 侧脸、上半身、表情中性偏自信**。
+用途：左列角色档案顶部 195×260 那块。要求**正面/3⁄4 侧脸、上半身、表情中性偏自信**。
 
 ```
 {基础风格头}
@@ -127,7 +127,7 @@ Reference era: Game Boy Camera self-portrait, Famicom RPG NPC sprite scaled up, 
 - [ ] 放大到 200% 看像素边缘 —— 是硬切的方块边，不是渐变羽化。
 - [ ] 主体（脸 / 车型）能在缩略图尺寸（96px 宽）下被认出来。
 - [ ] 没有蓝、红、黄、紫等任何"反色相"像素混入。
-- [ ] 整张图的视觉感受和 [`design-constraints.md`](./design-constraints.md) 描述的"米黄纸 + 墨绿墨"系统是连续的，放进训练家手册或画廊里不"出戏"。
+- [ ] 整张图的视觉感受和 [`design-constraints.md`](./design-constraints.md) 描述的"米黄纸 + 墨绿墨"系统是连续的，放进角色档案或画廊里不"出戏"。
 
 ## 尝试记录
 
@@ -135,7 +135,7 @@ Reference era: Game Boy Camera self-portrait, Famicom RPG NPC sprite scaled up, 
 
 - 时间：2026-05-17 01:36 CST
 - 输入：`image-sample/selfie.png`，原图是 1280 × 1707 的正面自拍，人物居中，眼镜、黑发、黑色上衣和双肩包肩带特征明显。
-- 目标：按「A. 训练家肖像」处理成 3:4 头像，用作训练家手册顶部肖像。
+- 目标：按「A. 训练家肖像」处理成 3:4 头像，用作角色档案顶部肖像。
 - 输出：覆盖写回 `image-sample/selfie.png`，最终尺寸 192 × 256，对应 96 × 128 internal pixel resolution 的 2× 最近邻放大。
 
 实际提示词策略：

@@ -2,13 +2,18 @@ import Image from "next/image";
 import { ImgPh } from "@/components/primitives";
 import type { Itasha } from "@/lib/content";
 
+const SLOTS = 4;
+
 export function ItashaGallery({ items }: { items: Itasha[] }) {
+  const filled = items.slice(0, SLOTS);
+  const emptyCount = SLOTS - filled.length;
+
   return (
     <div className="win">
       <div className="win-title">
         <span>◆ ITASHA · 痛车</span>
         <span className="en" style={{ fontSize: 8 }}>
-          {items.length} PHOTOS
+          {filled.length} / {SLOTS} PHOTOS
         </span>
       </div>
       <div style={{ padding: 12 }}>
@@ -19,9 +24,9 @@ export function ItashaGallery({ items }: { items: Itasha[] }) {
             gap: 8,
           }}
         >
-          {items.map((it, i) => (
+          {filled.map((it, i) => (
             <div
-              key={i}
+              key={`f-${i}`}
               className="invert-hover"
               style={{
                 border: "2px solid var(--color-ink)",
@@ -65,6 +70,43 @@ export function ItashaGallery({ items }: { items: Itasha[] }) {
                   }}
                 >
                   {it.place} · {it.date}
+                </span>
+              </div>
+            </div>
+          ))}
+
+          {Array.from({ length: emptyCount }).map((_, i) => (
+            <div
+              key={`e-${i}`}
+              style={{
+                border: "2px solid var(--color-ink)",
+                background: "var(--color-paper)",
+                padding: 6,
+              }}
+            >
+              <div
+                className="warn-tape"
+                style={{ aspectRatio: "4 / 3" }}
+                aria-label="garage closed"
+              >
+                <span className="sign">CLOSED</span>
+              </div>
+              <div className="flex flex-col" style={{ paddingTop: 6 }}>
+                <span
+                  className="mono"
+                  style={{ fontSize: 13, color: "var(--color-ink-soft)" }}
+                >
+                  ——
+                </span>
+                <span
+                  className="en"
+                  style={{
+                    fontSize: 8,
+                    color: "var(--color-mid)",
+                    marginTop: 2,
+                  }}
+                >
+                  準備中 · TBA
                 </span>
               </div>
             </div>

@@ -35,6 +35,6 @@ export const FAKE_DAILY_CODE: DailyCode = {
     ago: "2h ago",
     branch: "main",
     sha: "abc1234",
-    msg: "feat: trainer-card grid",
+    msg: "feat: character-file grid",
   },
 };

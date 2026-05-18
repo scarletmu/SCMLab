@@ -89,6 +89,7 @@
   font-size: 9px;
   letter-spacing: 0.06em;
 }
+.win-title * { color: var(--color-paper); }
 .win-title .dots { display: inline-flex; gap: 4px; }
 .win-title .dots i {
   width: 8px; height: 8px;
@@ -233,6 +234,30 @@
   background: var(--color-paper);
   border: 2px solid var(--color-ink);
   padding: 2px 8px;
+  z-index: 1;
+}
+
+/* ── warning tape (closed-garage placeholder) ──────────────────── */
+.warn-tape {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-mid) 0 8px,
+    var(--color-paper) 8px 28px
+  );
+  border: 2px solid var(--color-ink);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.warn-tape .sign {
+  background: var(--color-paper);
+  border: 2px solid var(--color-ink);
+  box-shadow: var(--shadow-drop-sm);
+  padding: 4px 10px;
+  font-family: var(--font-en);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
   z-index: 1;
 }
 
