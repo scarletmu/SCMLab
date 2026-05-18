@@ -181,7 +181,7 @@
 - 肖像（角色档案）：195×260 或任何 3/4 比例。
 - 痛车照片：**4/3 比例**。
 - 人像画廊照片：**3/4 比例**。
-- 所有照片从 `/media/*` 提供（VDS 上由 Nginx alias —— 见 [architecture.md](./architecture.md)）。放大时加 `image-rendering: pixelated` 保留 8-bit 颗粒感。
+- 所有照片从 `/media/*` 提供（VDS 上 `/opt/scmlab/media` 由 Next.js 容器直接服务 —— 见 [architecture.md](./architecture.md)）。放大时加 `image-rendering: pixelated` 保留 8-bit 颗粒感。
 
 ## 什么时候可以偏离
 

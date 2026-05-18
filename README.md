@@ -6,7 +6,7 @@ ScarletMu 的个人主页 —— 8-bit RPG 风格的角色档案。
 
 - **框架**：Next.js 16（App Router）+ Tailwind v4
 - **数据**：YAML + Zod（半静态）／ GitHub GraphQL（ISR 1h）／ Open-Meteo（ISR 30min）
-- **运行**：Docker + Nginx 反代 + certbot，自托管 VDS
+- **运行**：Docker + Caddy 反代（自动 TLS），自托管 VDS；生产配置在 sibling [`Self-Deploy`](../Self-Deploy/) 仓
 - **客户端组件**：仅 `PlayTime` / `Typewriter` / `BgmToggle`
 
 ## 隐私分层
@@ -15,7 +15,7 @@ ScarletMu 的个人主页 —— 8-bit RPG 风格的角色档案。
 
 - `content/*.yml` —— 角色 / 装备 / 画廊真实数据（仅 `*.example.yml` 模板入库）
 - `public/media/` —— 原图；生产由 VDS bind-mount 注入
-- `deploy/` —— 部署 runbook、Nginx 配置；整个目录都不入库
+- `deploy/` —— 仅本地保留的指引文档（指向 sibling `Self-Deploy/services/scmlab/`）；整个目录都不入库
 
 ## 文档
 

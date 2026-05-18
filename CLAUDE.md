@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-LLM-facing index for `scarletmu.com` — ScarletMu's personal homepage. 8-bit RPG visual metaphor. Next.js 16 App Router + Tailwind v4 + RSC/ISR, Dockerized, deployed to a self-hosted VDS behind Nginx.
+LLM-facing index for `scarletmu.com` — ScarletMu's personal homepage. 8-bit RPG visual metaphor. Next.js 16 App Router + Tailwind v4 + RSC/ISR, Dockerized, deployed to a self-hosted VDS behind a shared Caddy reverse proxy. Production runtime configuration lives in a sibling [`Self-Deploy`](../Self-Deploy/) repository; this repo is only the image factory.
 
 ## Repo layout
 
@@ -14,7 +14,8 @@ LLM-facing index for `scarletmu.com` — ScarletMu's personal homepage. 8-bit RP
 | `content/*.example.yml` | Tracked templates with safe placeholder data — schema in `lib/content.ts` |
 | `content/*.yml` | **Gitignored** (real personal data). On VDS, bind-mounted from the content path configured in `.env` (`CONTENT_DIR`). Loader prefers real, falls back to example so fresh clones run without setup. **Exception:** `content/itasha.yml` has no `.example.yml` fallback — missing or short → gallery fills with `CLOSED` warning-tape placeholders. |
 | `public/media/` | Gitignored. On VDS, bind-mounted from the media path configured in `.env` (`MEDIA_DIR`) |
-| `deploy/` | **Not in the repo.** Entire directory is gitignored — runbook + Nginx config live locally and on the VDS only. |
+| `deploy/` | **Not in the repo.** Entire directory is gitignored. Holds a local pointer to the sibling `Self-Deploy/services/scmlab/` checkout, which is where the runtime Compose / Caddy / release scripts actually live. |
+| `scripts/build.sh` | Image factory entry point. `scripts/build.sh v0.1.0` produces `scarletmu-home:v0.1.0` locally; nothing here ships to the VDS. |
 | `docs/` | Architecture, design constraints, iteration history |
 | `_design/` | **Not on `main`.** Lives on the `assets` orphan branch. See [Design archive](#design-archive) below. |
 
@@ -37,7 +38,22 @@ LLM-facing index for `scarletmu.com` — ScarletMu's personal homepage. 8-bit RP
 
 ## Deploy
 
-The `deploy/` directory is not in the repo (gitignored end-to-end). Shape of the setup: rsync to a VDS, `docker compose up -d --build`, Nginx reverse-proxies `127.0.0.1:3000`, certbot for TLS. Media originals + real content live outside the container and are bind-mounted in via `MEDIA_DIR` / `CONTENT_DIR` from `.env`. The actual runbook + Nginx server block live locally on the site operator's machine and on the VDS.
+This repo only produces the image. Everything from "image exists locally" onward — Compose file, Caddy reverse-proxy fragment, ssh-based image shipping, runtime `.env`, bind-mounted real content/media — lives in the sibling `Self-Deploy/services/scmlab/` repository.
+
+Shape of the runtime: a shared Caddy container (owned by `Self-Deploy/infra/caddy/`) terminates TLS on 443 and reverse-proxies `scmlab-web:3000` over a shared Docker network. The SCMLab container binds no host port. Media originals + real `content/*.yml` live on the VDS under `/opt/scmlab/{media,content}` and are bind-mounted read-only into the container.
+
+Release loop:
+
+```bash
+# 1. Build (this repo)
+scripts/build.sh v0.1.0
+
+# 2. Ship + restart (Self-Deploy repo)
+cd ../Self-Deploy/services/scmlab
+IMAGE_TAG=v0.1.0 scripts/release.sh
+```
+
+See `Self-Deploy/services/scmlab/docs/deployment.md` for the full procedure, including first-time VDS setup and content/media updates that don't require a release.
 
 ## Iteration history
 

@@ -13,9 +13,10 @@
 | 动态数据 | `fetch(url, { next: { revalidate } })` | GitHub GraphQL（ISR 1h）、Open-Meteo（ISR 30min）。 |
 | 兜底 | `lib/prng.ts`（mulberry32）+ `content/projects-manual.yml` | `GITHUB_TOKEN` 缺失或请求失败时使用。保证不带 secret 也能本地开发。 |
 | 容器 | 多阶段 Dockerfile，`output: "standalone"` | 以非 root 用户 `nextjs` 运行。 |
-| 部署 | 自托管 VDS，`docker compose up -d --build` | 手动 rsync 上去；暂无 CI/CD。 |
-| 反向代理 | Nginx（VDS 上已装好） | certbot 出 TLS。反代到 `127.0.0.1:3000`。 |
-| 媒体托管 | VDS 上由 `.env` 的 `MEDIA_DIR` 指定的路径，以只读 bind-mount 注入容器的 `public/media/` | Nginx 直出 `/media/*`；Next 走 `/_next/image` 做优化。两条路径同时存在不冲突。 |
+| 部署 | 自托管 VDS。本仓只产出镜像（`scripts/build.sh`）；运行时配置在 sibling [`Self-Deploy`](../../Self-Deploy/) 仓的 `services/scmlab/` 下。镜像通过 `docker save \| ssh docker load` 流转，无第三方 registry。 |
+| 反向代理 | Caddy 容器（`Self-Deploy/infra/caddy/`，共享） | 自动 TLS。Caddy 与 `scmlab-web` 容器共用 `vds-public` Docker network，反代到 `scmlab-web:3000`。SCMLab 容器不对宿主暴露端口。 |
+| 媒体托管 | VDS 上 `/opt/scmlab/media`，以只读 bind-mount 注入容器的 `public/media/` | v1 由 Next.js 进程同时服务 `/media/*` 和 `/_next/image`，Caddy 不挂载这个路径。若日后 `/media/*` 成为热点，再加 Caddy 直发并在 `scarletmu.caddy` 中加 `handle_path /media/*`。 |
+| 内容数据 | VDS 上 `/opt/scmlab/content`，bind-mount 到容器 `/app/content` | 真实 `*.yml` 不入任何 git 仓；`*.example.yml` 模板仍在本仓中。 |
 
 ## 为什么用 VDS 而不是 Vercel
 
@@ -56,7 +57,8 @@ lib/
   cn.ts          # clsx 简单包装
 content/         # YAML 半静态数据
 public/media/    # 已 gitignore；生产由 MEDIA_DIR 的 bind-mount 注入
-deploy/          # 整目录 gitignore —— 部署 runbook + nginx 配置只在本地和 VDS 上保留（Dockerfile 在仓库根）
+deploy/          # 整目录 gitignore —— 仅本地保留的指引文档，指向 sibling Self-Deploy 仓
+scripts/build.sh # 镜像工厂入口，产出 scarletmu-home:<tag>（Dockerfile 在仓库根）
 # （_design/ 归档在 `assets` 孤立分支 —— 见 CLAUDE.md）
 docs/            # 本目录
 ```
